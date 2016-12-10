@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+
+<body>
+
+	<h1 id="holaMundo"></h1>
+
+	<script src="https://www.gstatic.com/firebasejs/3.6.3/firebase.js"></script>
+	<script>
+		// Initialize Firebase
+		var config = {
+			apiKey: "AIzaSyAFuhfxUYsEqKgcIwWU6XdkfKWQRXP5ssY",
+			authDomain: "first-conecction.firebaseapp.com",
+			databaseURL: "https://first-conecction.firebaseio.com",
+			storageBucket: "first-conecction.appspot.com",
+			messagingSenderId: "560464549562"
+		};
+		firebase.initializeApp(config);
+
+		var holaMundo = document.getElementById('holaMundo')
+		// Creando referencia a la db con firebase, creando una localizacion hija con un texto
+		var dbRef = firebase.database().ref().child('text')
+
+		// sincronizando cualquier cambio en la db
+		dbRef.on('value', snap => holaMundo.innerText = snap.val())
+
+
+	</script>
+</body>
+
+</html>
