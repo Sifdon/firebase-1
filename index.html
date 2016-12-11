@@ -7,18 +7,14 @@
 	<script src="https://www.gstatic.com/firebasejs/3.6.3/firebase.js"></script>
 	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" href="./index.css">
 </head>
 
 <body>
-	<div class="container">
-		<input type="email" id="txtEmail" placeholder="Email">
-		<input type="password" id="txtPassword" placeholder="Contraseña">
-		<button id="btnLogin" class="btn btn-action">Login</button>
-		<button id="btnSignUp" class="btn btn-secondary">Registrate</button>
-		<button id="btnLogout" class="btn btn-action hide">Logout</button>
-	</div>
+	<progress value="0" max="100" id="uploader">0%</progress>
+	<input type="file" value="upload" id="fileButton" />
 
-	<script src="app.js"></script>
+	<script src="./app.js"></script>
 </body>
 
 </html>

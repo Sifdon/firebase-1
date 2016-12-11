@@ -9,52 +9,34 @@
 	}
 	firebase.initializeApp(config)
 
-	// obtener elementos
-	const txtEmail = document.getElementById('txtEmail')
-	const txtPassword = document.getElementById('txtPassword')
-	const btnLogin = document.getElementById('btnLogin')
-	const btnSignUp = document.getElementById('btnSignUp')
-	const btnLogout = document.getElementById('btnLogout')
+	// obtener Elementos
+	var uploader = document.getElementById('uploader')
+	var fileButton = document.getElementById('fileButton')
 
-	// añadir evento login
-	btnLogin.addEventListener('click', e => {
-		// obtener email y pass
-		const email = txtEmail.value
-		const pass = txtPassword.value
-		// almacenando el valor que retorna la promise
-		const auth = firebase.auth()
-		// sign in
-		const promise = auth.signInWithEmailAndPassword(email, pass)
-		promise.catch(e => console.log(e.message))
+	// vigilar selección archivo
+	fileButton.addEventListener('change', e => {
+		//Obtener archivo
+		var file = e.target.files[0]
 
+		// crear un storage ref
+		var storageRef = firebase.storage().ref('mis_fotos/' + file.name)
+
+		// subir archivo
+		var task = storageRef.put(file)
+
+		// actualizar barra progreso
+		task.on('state_changed',
+			function progress(snapshot) {
+				var percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+				uploader.value = percentage
+			},
+			function error(err) {
+				console.log('erronea carga')
+			},
+			function complete() {
+				console.log('exitosa carga')
+			}
+		)
 	})
-
-	// añadir evento signup
-	btnSignUp.addEventListener('click', e => {
-		// obtener email y pass
-		// TODO: comprobar que el email sea real
-		const email = txtEmail.value
-		const pass = txtPassword.value
-		// almacenando el valor que retorna la promise
-		const auth = firebase.auth()
-		// sign in
-		const promise = auth.createUserWithEmailAndPassword(email, pass)
-		promise.catch(e => console.log(e.message))
-	})
-
-	btnLogout.addEventListener('click', e => {
-		firebase.auth().signOut()
-	})
-
-	// Añadir un listener en tiempo real
-	 firebase.auth().onAuthStateChanged( firebaseUser => {
-		if(firebaseUser) {
-			console.log(firebaseUser);
-			btnLogout.classList.remove('hide');
-		} else {
-			console.log('no logueado');
-			btnLogout.classList.add('hide');
-		}
-	});
 
 } ())
