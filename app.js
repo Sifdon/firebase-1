@@ -10,34 +10,51 @@
 	firebase.initializeApp(config)
 
 	// obtener elementos
-	const preObject = document.getElementById('objeto')
-	const ulList = document.getElementById('lista')
+	const txtEmail = document.getElementById('txtEmail')
+	const txtPassword = document.getElementById('txtPassword')
+	const btnLogin = document.getElementById('btnLogin')
+	const btnSignUp = document.getElementById('btnSignUp')
+	const btnLogout = document.getElementById('btnLogout')
 
-	// crear referencias a DB
-	const dbRefObject = firebase.database().ref().child('objeto')
-	const dbRefList = dbRefObject.child('habilidades')
+	// añadir evento login
+	btnLogin.addEventListener('click', e => {
+		// obtener email y pass
+		const email = txtEmail.value
+		const pass = txtPassword.value
+		// almacenando el valor que retorna la promise
+		const auth = firebase.auth()
+		// sign in
+		const promise = auth.signInWithEmailAndPassword(email, pass)
+		promise.catch(e => console.log(e.message))
 
-	// sincronizar cambios objeto con metodo on
-	dbRefObject.on('value', snap => {
-		preObject.innerText = JSON.stringify(snap.val(), null, 3)
 	})
 
-	// sincronizar cambios lista
-	dbRefList.on('child_added', snap => {
-		const li = document.createElement('li')
-		li.innerText = snap.val()
-		li.id = snap.key
-		ulList.appendChild(li)
+	// añadir evento signup
+	btnSignUp.addEventListener('click', e => {
+		// obtener email y pass
+		// TODO: comprobar que el email sea real
+		const email = txtEmail.value
+		const pass = txtPassword.value
+		// almacenando el valor que retorna la promise
+		const auth = firebase.auth()
+		// sign in
+		const promise = auth.createUserWithEmailAndPassword(email, pass)
+		promise.catch(e => console.log(e.message))
 	})
 
-	dbRefList.on('child_changed', snap => {
-		const liChanged = document.getElementById(snap.key)
-		liChanged.innerText = snap.val()
+	btnLogout.addEventListener('click', e => {
+		firebase.auth().signOut()
 	})
 
-	dbRefList.on('child_removed', snap => {
-		const liToRemove = document.getElementById(snap.key)
-		liToRemove.remove()
-	})
+	// Añadir un listener en tiempo real
+	 firebase.auth().onAuthStateChanged( firebaseUser => {
+		if(firebaseUser) {
+			console.log(firebaseUser);
+			btnLogout.classList.remove('hide');
+		} else {
+			console.log('no logueado');
+			btnLogout.classList.add('hide');
+		}
+	});
 
 } ())
